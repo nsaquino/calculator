@@ -36,13 +36,20 @@ let operator;
 const displayRef = document.querySelector('#display');
 const digits = document.querySelectorAll('.digit, .operator');
 const clearRef = document.querySelector('#clear');
+const equalBtn = document.querySelector('#equal');
 let displayValue = '';
 
 digits.forEach(digit => {
     digit.addEventListener('click', () => {
-        displayValue += digit.textContent;
-        displayRef.textContent += digit.textContent;
+        let button = digit.textContent;
+        if(isNaN(button)){
+            button = ` ${button} `;
+        }
+        displayValue += button;
+        displayRef.textContent += button;
     })
-})
+});
+
+clearRef.addEventListener('click', () => displayRef.textContent = '');
 
 clearRef.addEventListener('click', () => displayRef.textContent = '')
