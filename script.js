@@ -35,6 +35,7 @@ let operator;
 
 const displayRef = document.querySelector('#display');
 const digits = document.querySelectorAll('.digit, .operator');
+const clearRef = document.querySelector('#clear');
 let displayValue = '';
 
 digits.forEach(digit => {
@@ -43,3 +44,5 @@ digits.forEach(digit => {
         displayRef.textContent += digit.textContent;
     })
 })
+
+clearRef.addEventListener('click', () => displayRef.textContent = '')
