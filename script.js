@@ -14,8 +14,6 @@ function divide(a, b) {
     return a / b;
 }
 
-//---
-
 function operate(num1, operator, num2) {
     switch (operator) {
         case '+':
@@ -35,3 +33,13 @@ let firstNum;
 let secondNum;
 let operator;
 
+const displayRef = document.querySelector('#display');
+const digits = document.querySelectorAll('.digit, .operator');
+let displayValue = '';
+
+digits.forEach(digit => {
+    digit.addEventListener('click', () => {
+        displayValue += digit.textContent;
+        displayRef.textContent += digit.textContent;
+    })
+})
