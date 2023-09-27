@@ -50,39 +50,80 @@ function clearDisplay() {
     displayValue = '';
 }
 
+function displayIsClear() {
+    return displayRef.textContent === '';
+}
+
+function replaceOpInDisplay(op) {
+    let arr = getDisplay().split(" ");
+    arr[1] = op;    
+    console.log(arr.join(' '));
+}
+
 //---
 
 const displayRef = document.querySelector('#display');
-const digits = document.querySelectorAll('.digit, .operator');
+const btnDigits = document.querySelectorAll('.digit');
+const btnOps = document.querySelectorAll('.operator');
 const clearRef = document.querySelector('#clear');
 const equalBtn = document.querySelector('#equal');
 
 let displayValue = '';
-let clearOnNextInput = false;
+let opInDisplay = false;
+//let clearOnNextInput = false;
 
 let firstNum;
 let secondNum;
 let operator;
 
-digits.forEach(digit => {
-    digit.addEventListener('click', () => {
-        let button = digit.textContent;
-        if (isNaN(button)) {
-            button = ` ${button} `;
+btnDigits.forEach(btn => {
+    btn.addEventListener('click', () => {
+        let digit = btn.textContent;
+
+        if (opInDisplay) {
+            secondNum += digit;
+        } else {
+            firstNum += digit;
         }
-        if (clearOnNextInput) {
+
+        /* if (clearOnNextInput) {
             clearDisplay();
             clearOnNextInput = false;
+        } */
+
+        pushInDisplay(digit);
+    });
+});
+
+btnOps.forEach(btn => {
+    btn.addEventListener('click', () =>  {
+        if (displayIsClear()) return;
+
+        if (opInDisplay) {
+            if (secondNum === '') {
+                operator = btn.textContent;
+                replaceOpInDisplay(operator);
+            } else {
+                firstNum = operate(firstNum, operator, secondNum);
+                operator = btn.textContent;
+                secondNum = '';
+
+                clearDisplay();
+                pushInDisplay(`${firstNum} ${operator} `);
+            }
+        } else { //Display not empty
+            operator = btn.textContent;
+            pushInDisplay(` ${operator} `);
+            opInDisplay = true;
         }
-        pushInDisplay(button);
-    })
+    });
 });
 
 clearRef.addEventListener('click', clearDisplay);
-
+/* 
 equalBtn.addEventListener('click', () => {
     if (getDisplay().length == 0) return;
-    
+
     let partialRes;
     let arguments = getDisplay().split(" ");
     while (arguments.length > 0) {
@@ -104,4 +145,4 @@ equalBtn.addEventListener('click', () => {
     pushInDisplay(partialRes);
     return;
 });
-
+ */
