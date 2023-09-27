@@ -38,26 +38,46 @@ function operate(num1, operator, num2) {
 
 function pushInDisplay(content) {
     displayRef.textContent += content;
-    displayValue += content;
 }
 
 function getDisplay() {
-    return displayValue;
+    return displayRef.textContent;
 }
 
 function clearDisplay() {
     displayRef.textContent = '';
-    displayValue = '';
 }
 
-function displayIsClear() {
+function isDisplayClear() {
     return displayRef.textContent === '';
 }
 
 function replaceOpInDisplay(op) {
     let arr = getDisplay().split(" ");
     arr[1] = op;    
-    console.log(arr.join(' '));
+    displayRef.textContent = arr.join(' ');
+}
+
+function getFirstNum(){
+    return getDisplay().split(" ")[0];
+}
+
+function getOperator(){
+    return getDisplay().split(" ")[1];
+}
+
+function getSecondNum(){
+    return getDisplay().split(" ")[2];
+}
+
+function existsOperator() {
+    const op = getOperator();
+    return (op === '+' || op === '-' || op === '*' || op === '/');
+}
+
+function existsSecondNum() {
+    const secondNum = getSecondNum();
+    return (secondNum !== '' && secondNum !== undefined);
 }
 
 //---
@@ -65,63 +85,72 @@ function replaceOpInDisplay(op) {
 const displayRef = document.querySelector('#display');
 const btnDigits = document.querySelectorAll('.digit');
 const btnOps = document.querySelectorAll('.operator');
-const clearRef = document.querySelector('#clear');
-const equalBtn = document.querySelector('#equal');
+const btnClear = document.querySelector('#clear');
+const btnEqual = document.querySelector('#equal');
 
-let displayValue = '';
-let opInDisplay = false;
+//let displayValue = '';
 //let clearOnNextInput = false;
+//let existsOperator = false;
 
-let firstNum;
-let secondNum;
-let operator;
+// let firstNum;
+// let secondNum;
+// let operator;
 
 btnDigits.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', () => pushInDisplay(btn.textContent));
+});/* {
         let digit = btn.textContent;
 
-        if (opInDisplay) {
-            secondNum += digit;
-        } else {
-            firstNum += digit;
-        }
-
-        /* if (clearOnNextInput) {
-            clearDisplay();
-            clearOnNextInput = false;
-        } */
+        // if (existsOperator) {
+        //     secondNum += digit;
+        // } else {
+        //     firstNum += digit;
+        // }
+        // if (clearOnNextInput) {
+        //     clearDisplay();
+        //     clearOnNextInput = false;
+        // }
 
         pushInDisplay(digit);
     });
-});
+}); */
+
+btnClear.addEventListener('click', clearDisplay);
 
 btnOps.forEach(btn => {
     btn.addEventListener('click', () =>  {
-        if (displayIsClear()) return;
+        if (isDisplayClear()) {
+            console.log('empty');
+            return;
+        };
 
-        if (opInDisplay) {
-            if (secondNum === '') {
-                operator = btn.textContent;
-                replaceOpInDisplay(operator);
-            } else {
-                firstNum = operate(firstNum, operator, secondNum);
-                operator = btn.textContent;
-                secondNum = '';
-
+        if (existsOperator()) {
+            console.log('op in display');
+            if (existsSecondNum()) {
+                console.log('secondNum in display');
+                const firstNum = getFirstNum();
+                const operator = getOperator();
+                const secondNum = getSecondNum();
+                
                 clearDisplay();
-                pushInDisplay(`${firstNum} ${operator} `);
+                pushInDisplay(operate(firstNum, operator, secondNum));
+
+                //TODO: Check if error
+                
+                pushInDisplay(` ${btn.textContent} `);
+            } else {
+                console.log('secondNum not in display');
+                replaceOpInDisplay(btn.textContent);
             }
-        } else { //Display not empty
-            operator = btn.textContent;
-            pushInDisplay(` ${operator} `);
-            opInDisplay = true;
+        } else { //Only first number
+            console.log('op not in display');
+            pushInDisplay(` ${btn.textContent} `);
         }
     });
 });
 
-clearRef.addEventListener('click', clearDisplay);
 /* 
-equalBtn.addEventListener('click', () => {
+btnEqual.addEventListener('click', () => {
     if (getDisplay().length == 0) return;
 
     let partialRes;
