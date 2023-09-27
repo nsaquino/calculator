@@ -19,7 +19,9 @@ function operate(num1, operator, num2) {
     num1 = parseInt(num1);
     num2 = parseInt(num2);
 
+    if (!isNaN(num1) && operator === undefined) return num1;
     if (isNaN(num1) || isNaN(num2)) return 'SYNTAX ERROR';
+
     switch (operator) {
         case '+':
             return add(num1, num2);
@@ -48,25 +50,25 @@ function clearDisplay() {
     displayRef.textContent = '';
 }
 
-function isDisplayClear() {
-    return displayRef.textContent === '';
+function isDisplayEmpty() {
+    return displayRef.textContent.trim().length === 0;
 }
 
 function replaceOpInDisplay(op) {
     let arr = getDisplay().split(" ");
-    arr[1] = op;    
+    arr[1] = op;
     displayRef.textContent = arr.join(' ');
 }
 
-function getFirstNum(){
+function getFirstNum() {
     return getDisplay().split(" ")[0];
 }
 
-function getOperator(){
+function getOperator() {
     return getDisplay().split(" ")[1];
 }
 
-function getSecondNum(){
+function getSecondNum() {
     return getDisplay().split(" ")[2];
 }
 
@@ -89,7 +91,7 @@ const btnClear = document.querySelector('#clear');
 const btnEqual = document.querySelector('#equal');
 
 //let displayValue = '';
-//let clearOnNextInput = false;
+let clearOnNextInput = false;
 //let existsOperator = false;
 
 // let firstNum;
@@ -97,8 +99,15 @@ const btnEqual = document.querySelector('#equal');
 // let operator;
 
 btnDigits.forEach(btn => {
-    btn.addEventListener('click', () => pushInDisplay(btn.textContent));
-});/* {
+    btn.addEventListener('click', () => {
+        if (clearOnNextInput) {
+            clearDisplay();
+            clearOnNextInput = false;
+        }
+        pushInDisplay(btn.textContent)
+    });
+});
+/* 
         let digit = btn.textContent;
 
         // if (existsOperator) {
@@ -112,66 +121,48 @@ btnDigits.forEach(btn => {
         // }
 
         pushInDisplay(digit);
-    });
-}); */
+    });*/
 
 btnClear.addEventListener('click', clearDisplay);
 
 btnOps.forEach(btn => {
-    btn.addEventListener('click', () =>  {
-        if (isDisplayClear()) {
-            console.log('empty');
+    btn.addEventListener('click', () => {
+        if (isDisplayEmpty() || clearOnNextInput) {
             return;
         };
 
         if (existsOperator()) {
-            console.log('op in display');
             if (existsSecondNum()) {
-                console.log('secondNum in display');
                 const firstNum = getFirstNum();
                 const operator = getOperator();
                 const secondNum = getSecondNum();
-                
+
                 clearDisplay();
                 pushInDisplay(operate(firstNum, operator, secondNum));
 
                 //TODO: Check if error
-                
+
                 pushInDisplay(` ${btn.textContent} `);
             } else {
-                console.log('secondNum not in display');
                 replaceOpInDisplay(btn.textContent);
             }
         } else { //Only first number
-            console.log('op not in display');
             pushInDisplay(` ${btn.textContent} `);
         }
     });
 });
 
-/* 
+
 btnEqual.addEventListener('click', () => {
-    if (getDisplay().length == 0) return;
+    if (isDisplayEmpty()) return;
 
-    let partialRes;
-    let arguments = getDisplay().split(" ");
-    while (arguments.length > 0) {
-        firstNum = arguments.shift();
-        operator = arguments.shift();
-        secondNum = arguments.shift();
+    const firstNum = getFirstNum();
+    const operator = getOperator();
+    const secondNum = getSecondNum();
 
-        partialRes = operate(firstNum, operator, secondNum);
-        if (isNaN(partialRes)) {
-            clearDisplay();
-            pushInDisplay(partialRes);
-            clearOnNextInput = true;
-            return;
-        }
-    }
-
-    //Success
+    const res = operate(firstNum, operator, secondNum);
     clearDisplay();
-    pushInDisplay(partialRes);
+    pushInDisplay(res);
+    if (isNaN(res)) clearOnNextInput = true;
     return;
 });
- */
