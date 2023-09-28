@@ -19,7 +19,9 @@ function operate(num1, operator, num2) {
     num1 = parseInt(num1);
     num2 = parseInt(num2);
 
+    if (!isNaN(num1) && operator === undefined) return num1;
     if (isNaN(num1) || isNaN(num2)) return 'SYNTAX ERROR';
+
     switch (operator) {
         case '+':
             return add(num1, num2);
@@ -38,70 +40,129 @@ function operate(num1, operator, num2) {
 
 function pushInDisplay(content) {
     displayRef.textContent += content;
-    displayValue += content;
 }
 
 function getDisplay() {
-    return displayValue;
+    return displayRef.textContent;
 }
 
 function clearDisplay() {
     displayRef.textContent = '';
-    displayValue = '';
+}
+
+function isDisplayEmpty() {
+    return displayRef.textContent.trim().length === 0;
+}
+
+function replaceOpInDisplay(op) {
+    let arr = getDisplay().split(" ");
+    arr[1] = op;
+    displayRef.textContent = arr.join(' ');
+}
+
+function getFirstNum() {
+    return getDisplay().split(" ")[0];
+}
+
+function getOperator() {
+    return getDisplay().split(" ")[1];
+}
+
+function getSecondNum() {
+    return getDisplay().split(" ")[2];
+}
+
+function existsOperator() {
+    const op = getOperator();
+    return (op === '+' || op === '-' || op === '*' || op === '/');
+}
+
+function existsSecondNum() {
+    const secondNum = getSecondNum();
+    return (secondNum !== '' && secondNum !== undefined);
 }
 
 //---
 
 const displayRef = document.querySelector('#display');
-const digits = document.querySelectorAll('.digit, .operator');
-const clearRef = document.querySelector('#clear');
-const equalBtn = document.querySelector('#equal');
+const btnDigits = document.querySelectorAll('.digit');
+const btnOps = document.querySelectorAll('.operator');
+const btnClear = document.querySelector('#clear');
+const btnEqual = document.querySelector('#equal');
 
-let displayValue = '';
+//let displayValue = '';
 let clearOnNextInput = false;
+//let existsOperator = false;
 
-let firstNum;
-let secondNum;
-let operator;
+// let firstNum;
+// let secondNum;
+// let operator;
 
-digits.forEach(digit => {
-    digit.addEventListener('click', () => {
-        let button = digit.textContent;
-        if (isNaN(button)) {
-            button = ` ${button} `;
-        }
+btnDigits.forEach(btn => {
+    btn.addEventListener('click', () => {
         if (clearOnNextInput) {
             clearDisplay();
             clearOnNextInput = false;
         }
-        pushInDisplay(button);
-    })
+        pushInDisplay(btn.textContent)
+    });
+});
+/* 
+        let digit = btn.textContent;
+
+        // if (existsOperator) {
+        //     secondNum += digit;
+        // } else {
+        //     firstNum += digit;
+        // }
+        // if (clearOnNextInput) {
+        //     clearDisplay();
+        //     clearOnNextInput = false;
+        // }
+
+        pushInDisplay(digit);
+    });*/
+
+btnClear.addEventListener('click', clearDisplay);
+
+btnOps.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (isDisplayEmpty() || clearOnNextInput) {
+            return;
+        };
+
+        if (existsOperator()) {
+            if (existsSecondNum()) {
+                const firstNum = getFirstNum();
+                const operator = getOperator();
+                const secondNum = getSecondNum();
+
+                clearDisplay();
+                pushInDisplay(operate(firstNum, operator, secondNum));
+
+                //TODO: Check if error
+
+                pushInDisplay(` ${btn.textContent} `);
+            } else {
+                replaceOpInDisplay(btn.textContent);
+            }
+        } else { //Only first number
+            pushInDisplay(` ${btn.textContent} `);
+        }
+    });
 });
 
-clearRef.addEventListener('click', clearDisplay);
 
-equalBtn.addEventListener('click', () => {
-    if (getDisplay().length == 0) return;
-    
-    let partialRes;
-    let arguments = getDisplay().split(" ");
-    while (arguments.length > 0) {
-        firstNum = arguments.shift();
-        operator = arguments.shift();
-        secondNum = arguments.shift();
+btnEqual.addEventListener('click', () => {
+    if (isDisplayEmpty()) return;
 
-        partialRes = operate(firstNum, operator, secondNum);
-        if (isNaN(partialRes)) {
-            clearDisplay();
-            pushInDisplay(partialRes);
-            clearOnNextInput = true;
-            return;
-        }
-    }
+    const firstNum = getFirstNum();
+    const operator = getOperator();
+    const secondNum = getSecondNum();
 
-    //Success
+    const res = operate(firstNum, operator, secondNum);
     clearDisplay();
-    pushInDisplay(partialRes);
+    pushInDisplay(res);
+    if (isNaN(res)) clearOnNextInput = true;
     return;
 });
-
