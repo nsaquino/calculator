@@ -3,7 +3,9 @@
 }
 
 #container {
-    border: 1px solid black;
+    /* border: 1px solid black; */
+    background-color: #333333;
+    border-radius: 2%;
     width: 400px;
     height: 600px;
     padding: 15px;
@@ -20,13 +22,21 @@
     flex-direction: column;
     justify-content: center;
     gap: 5px;
+    font-size: 2rem;
 }
 
 #display {
+    font-family: monospace;
     width: 100%;
     height: 150px;
-    border: 1px solid black;
     margin-bottom: 10px;
+    border: 1px solid black;
+    background-color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    font-size: 50px;
+    overflow: hidden;
 }
 
 .row {
@@ -39,13 +49,31 @@
 
 .row > *{
     flex-grow: 1;
+    font-size: 1em;
 }
 
 button {
+    padding: 0;
+    margin: 0;
     width: 50px;
+    border: 1px solid black;
+}
+
+button:hover {
+    opacity: 70%;
 }
 
 #clear {
     width: auto;
+}
+
+.digit {
+    background-color: rgb(202, 202, 202);
+    color: black;
+}
+
+.operator {
+    background-color: rgb(182, 95, 95);
+    color: rgb(224, 224, 224);
 }
 
