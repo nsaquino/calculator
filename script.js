@@ -97,6 +97,12 @@ function numHasDot(numStr){
     return numStr.includes('.');
 }
 
+function deleteCharAtBack(){
+    displayRef.textContent = displayRef.textContent.trimEnd();
+    displayRef.textContent = displayRef.textContent.slice(0, displayRef.textContent.length - 1);
+    displayRef.textContent = displayRef.textContent.trimEnd();
+}
+
 //---
 
 const displayRef = document.querySelector('#display');
@@ -105,6 +111,7 @@ const btnOps = document.querySelectorAll('.operator');
 const btnClear = document.querySelector('#clear');
 const btnEqual = document.querySelector('#equal');
 const btnDot = document.querySelector('#dot');
+const btnBackspace = document.querySelector('#backspace');
 
 //let displayValue = '';
 let clearOnNextInput = false;
@@ -198,3 +205,11 @@ btnDot.addEventListener('click', () => {
         }
     }
 })
+
+btnBackspace.addEventListener('click', () => {
+    if (clearOnNextInput) {
+        clearDisplay();
+        return;
+    }
+    deleteCharAtBack();
+}); 
