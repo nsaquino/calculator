@@ -83,6 +83,11 @@ function existsOperator() {
     return (op === '+' || op === '-' || op === '*' || op === '/');
 }
 
+function existsFirstNum() {
+    const firstNum = getFirstNum();
+    return (firstNum !== '' && firstNum !== undefined);
+}
+
 function existsSecondNum() {
     const secondNum = getSecondNum();
     return (secondNum !== '' && secondNum !== undefined);
@@ -175,8 +180,17 @@ btnEqual.addEventListener('click', () => {
 });
 
 btnDot.addEventListener('click', () => {
-    if (isDisplayEmpty() || clearOnNextInput) {
+    if (clearOnNextInput) {
         return;
     };
-    //TODO
+    
+    if (existsOperator()){
+        if(existsSecondNum() && !getSecondNum().includes(".")){
+            pushInDisplay('.');
+        }
+    } else {
+        if(existsFirstNum() && !getFirstNum().includes(".")){
+            pushInDisplay('.');
+        }
+    }
 })
