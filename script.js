@@ -113,13 +113,7 @@ const btnEqual = document.querySelector('#equal');
 const btnDot = document.querySelector('#dot');
 const btnBackspace = document.querySelector('#backspace');
 
-//let displayValue = '';
 let clearOnNextInput = false;
-//let existsOperator = false;
-
-// let firstNum;
-// let secondNum;
-// let operator;
 
 btnDigits.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -130,21 +124,6 @@ btnDigits.forEach(btn => {
         pushInDisplay(btn.textContent)
     });
 });
-/* 
-        let digit = btn.textContent;
-
-        // if (existsOperator) {
-        //     secondNum += digit;
-        // } else {
-        //     firstNum += digit;
-        // }
-        // if (clearOnNextInput) {
-        //     clearDisplay();
-        //     clearOnNextInput = false;
-        // }
-
-        pushInDisplay(digit);
-    });*/
 
 btnClear.addEventListener('click', clearDisplay);
 
@@ -162,9 +141,6 @@ btnOps.forEach(btn => {
 
                 clearDisplay();
                 pushInDisplay(operate(firstNum, operator, secondNum));
-
-                //TODO: Check if error
-
                 pushInDisplay(` ${btn.textContent} `);
             } else {
                 replaceOpInDisplay(btn.textContent);
