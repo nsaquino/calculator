@@ -16,8 +16,8 @@ function divide(a, b) {
 }
 
 function operate(num1, operator, num2) {
-    num1 = parseInt(num1);
-    num2 = parseInt(num2);
+    num1 = parseFloat(num1);
+    num2 = parseFloat(num2);
 
     if (!isNaN(num1) && operator === undefined) return num1;
     if (isNaN(num1) || isNaN(num2)) return 'SYNTAX ERROR';
@@ -95,6 +95,7 @@ const btnDigits = document.querySelectorAll('.digit');
 const btnOps = document.querySelectorAll('.operator');
 const btnClear = document.querySelector('#clear');
 const btnEqual = document.querySelector('#equal');
+const btnDot = document.querySelector('#dot');
 
 //let displayValue = '';
 let clearOnNextInput = false;
@@ -172,3 +173,10 @@ btnEqual.addEventListener('click', () => {
     if (isNaN(res)) clearOnNextInput = true;
     return;
 });
+
+btnDot.addEventListener('click', () => {
+    if (isDisplayEmpty() || clearOnNextInput) {
+        return;
+    };
+    //TODO
+})
