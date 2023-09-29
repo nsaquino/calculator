@@ -39,7 +39,7 @@ function operate(num1, operator, num2) {
         default:
             return 'SYNTAX ERROR';
     }
-    return Math.round(res * 100) / 100;
+    return Math.round(res * 1000000) / 1000000;
 }
 
 //---
