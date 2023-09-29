@@ -88,6 +88,10 @@ function existsSecondNum() {
     return (secondNum !== '' && secondNum !== undefined);
 }
 
+function numHasDot(numStr){
+    return numStr.includes('.');
+}
+
 //---
 
 const displayRef = document.querySelector('#display');
@@ -178,5 +182,8 @@ btnDot.addEventListener('click', () => {
     if (isDisplayEmpty() || clearOnNextInput) {
         return;
     };
-    //TODO
+    
+    if (existsOperator()) {
+        
+    }
 })
