@@ -21,19 +21,25 @@ function operate(num1, operator, num2) {
 
     if (!isNaN(num1) && operator === undefined) return num1;
     if (isNaN(num1) || isNaN(num2)) return 'SYNTAX ERROR';
-
+    
+    let res;
     switch (operator) {
         case '+':
-            return add(num1, num2);
+            res = add(num1, num2);
+            break;
         case '-':
-            return substract(num1, num2);
+            res = substract(num1, num2);
+            break;
         case '*':
-            return multiply(num1, num2);
+            res = multiply(num1, num2);
+            break;
         case '/':
-            return divide(num1, num2);
+            res = divide(num1, num2);
+            break;
         default:
             return 'SYNTAX ERROR';
     }
+    return Math.round(res * 100) / 100;
 }
 
 //---
