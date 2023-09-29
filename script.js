@@ -37,9 +37,9 @@ function operate(num1, operator, num2) {
             res = divide(num1, num2);
             break;
         default:
-            return 'SYNTAX ERROR';
+            res = 'SYNTAX ERROR';
     }
-    return Math.round(res * 1000000) / 1000000;
+    return isNaN(res) ? res : Math.round(res * 1000000) / 1000000;
 }
 
 //---
