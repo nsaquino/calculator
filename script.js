@@ -93,6 +93,10 @@ function existsSecondNum() {
     return (secondNum !== '' && secondNum !== undefined);
 }
 
+function numHasDot(numStr){
+    return numStr.includes('.');
+}
+
 //---
 
 const displayRef = document.querySelector('#display');
