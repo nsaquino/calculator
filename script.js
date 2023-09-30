@@ -190,6 +190,24 @@ btnClear.addEventListener('click', clearDisplay);
 btnBackspace.addEventListener('click', deleteCharAtBack);
 
 window.addEventListener('keydown', (e) => {
-    console.log('Key: ' + e.key);
-    console.log('Code: ' + e.code);
+    const regexDigits = /\d/;
+    const regexOps = /\*|\+|\-|\//;
+    switch (e.key) {
+        case 'c':
+        case 'C':
+            clearDisplay();
+            break;
+        case 'Backspace':
+            deleteCharAtBack();
+            break;
+        case 'Enter':
+            parseAndOperate();
+            break;
+        case '.':
+            addDot();
+            break;
+        default:
+            if (regexDigits.test(e.key)) addDigit(e.key);
+            else if (regexOps.test(e.key)) addOperator(e.key);
+    }
 });
