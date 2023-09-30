@@ -1,4 +1,4 @@
-# Calculator (WIP)
+# Calculator
 
 Basic calculator to practice the fundamentals of HTML, CSS and JavaScript.
 
