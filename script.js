@@ -97,9 +97,7 @@ function numHasDot(numStr){
     return numStr.includes('.');
 }
 
-function addDigit(e){
-    const digit = e.target.textContent;
-
+function addDigit(digit){
     if (clearOnNextInput) {
         clearDisplay();
         clearOnNextInput = false;
@@ -107,8 +105,7 @@ function addDigit(e){
     pushInDisplay(digit);
 }
 
-function addOperator(e){
-    const op = e.target.textContent;
+function addOperator(op){
     if (isDisplayEmpty() || clearOnNextInput) {
         return;
     };
@@ -183,8 +180,8 @@ const btnBackspace = document.querySelector('#backspace');
 
 let clearOnNextInput = false;
 
-btnDigits.forEach(btn => btn.addEventListener('click', addDigit));
-btnOps.forEach(btn => btn.addEventListener('click', addOperator));
+btnDigits.forEach(btn => btn.addEventListener('click', (e) => addDigit(e.target.textContent)));
+btnOps.forEach(btn => btn.addEventListener('click', (e) => addOperator(e.target.textContent)));
 btnDot.addEventListener('click', addDot);
 
 btnEqual.addEventListener('click', parseAndOperate);
