@@ -67,6 +67,10 @@ button:hover {
     opacity: 70%;
 }
 
+button:active {
+    opacity: 50%;
+}
+
 #clear {
     width: auto;
 }
