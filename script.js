@@ -97,10 +97,78 @@ function numHasDot(numStr){
     return numStr.includes('.');
 }
 
+function addDigit(e){
+    const digit = e.target.textContent;
+
+    if (clearOnNextInput) {
+        clearDisplay();
+        clearOnNextInput = false;
+    }
+    pushInDisplay(digit);
+}
+
+function addOperator(e){
+    const op = e.target.textContent;
+    if (isDisplayEmpty() || clearOnNextInput) {
+        return;
+    };
+
+    if (existsOperator()) {
+        if (existsSecondNum()) {
+            const firstNum = getFirstNum();
+            const operator = getOperator();
+            const secondNum = getSecondNum();
+
+            clearDisplay();
+            pushInDisplay(operate(firstNum, operator, secondNum));
+            pushInDisplay(` ${op} `);
+        } else {
+            replaceOpInDisplay(op);
+        }
+    } else { //Only first number
+        pushInDisplay(` ${op} `);
+    }
+}
+
+function addDot() {
+    if (clearOnNextInput) {
+        return;
+    };
+    
+    if (existsOperator()){
+        if(existsSecondNum() && !getSecondNum().includes(".")){
+            pushInDisplay('.');
+        }
+    } else {
+        if(existsFirstNum() && !getFirstNum().includes(".")){
+            pushInDisplay('.');
+        }
+    }
+}
+
 function deleteCharAtBack(){
+    if (clearOnNextInput) {
+        clearDisplay();
+        return;
+    }
+
     displayRef.textContent = displayRef.textContent.trimEnd();
     displayRef.textContent = displayRef.textContent.slice(0, displayRef.textContent.length - 1);
     displayRef.textContent = displayRef.textContent.trimEnd();
+}
+
+function parseAndOperate() {
+    if (isDisplayEmpty()) return;
+
+    const firstNum = getFirstNum();
+    const operator = getOperator();
+    const secondNum = getSecondNum();
+
+    const res = operate(firstNum, operator, secondNum);
+    clearDisplay();
+    pushInDisplay(res);
+    if (isNaN(res)) clearOnNextInput = true;
+    return;
 }
 
 //---
@@ -115,80 +183,14 @@ const btnBackspace = document.querySelector('#backspace');
 
 let clearOnNextInput = false;
 
-btnDigits.forEach(btn => {
-    btn.addEventListener('click', () => {
-        if (clearOnNextInput) {
-            clearDisplay();
-            clearOnNextInput = false;
-        }
-        pushInDisplay(btn.textContent)
-    });
-});
+btnDigits.forEach(btn => btn.addEventListener('click', addDigit));
+btnOps.forEach(btn => btn.addEventListener('click', addOperator));
+btnDot.addEventListener('click', addDot);
+
+btnEqual.addEventListener('click', parseAndOperate);
 
 btnClear.addEventListener('click', clearDisplay);
-
-btnOps.forEach(btn => {
-    btn.addEventListener('click', () => {
-        if (isDisplayEmpty() || clearOnNextInput) {
-            return;
-        };
-
-        if (existsOperator()) {
-            if (existsSecondNum()) {
-                const firstNum = getFirstNum();
-                const operator = getOperator();
-                const secondNum = getSecondNum();
-
-                clearDisplay();
-                pushInDisplay(operate(firstNum, operator, secondNum));
-                pushInDisplay(` ${btn.textContent} `);
-            } else {
-                replaceOpInDisplay(btn.textContent);
-            }
-        } else { //Only first number
-            pushInDisplay(` ${btn.textContent} `);
-        }
-    });
-});
-
-
-btnEqual.addEventListener('click', () => {
-    if (isDisplayEmpty()) return;
-
-    const firstNum = getFirstNum();
-    const operator = getOperator();
-    const secondNum = getSecondNum();
-
-    const res = operate(firstNum, operator, secondNum);
-    clearDisplay();
-    pushInDisplay(res);
-    if (isNaN(res)) clearOnNextInput = true;
-    return;
-});
-
-btnDot.addEventListener('click', () => {
-    if (clearOnNextInput) {
-        return;
-    };
-    
-    if (existsOperator()){
-        if(existsSecondNum() && !getSecondNum().includes(".")){
-            pushInDisplay('.');
-        }
-    } else {
-        if(existsFirstNum() && !getFirstNum().includes(".")){
-            pushInDisplay('.');
-        }
-    }
-})
-
-btnBackspace.addEventListener('click', () => {
-    if (clearOnNextInput) {
-        clearDisplay();
-        return;
-    }
-    deleteCharAtBack();
-});
+btnBackspace.addEventListener('click', deleteCharAtBack);
 
 window.addEventListener('keydown', (e) => {
     console.log('Key: ' + e.key);
