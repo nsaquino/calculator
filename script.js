@@ -188,4 +188,9 @@ btnBackspace.addEventListener('click', () => {
         return;
     }
     deleteCharAtBack();
-}); 
+});
+
+window.addEventListener('keydown', (e) => {
+    console.log('Key: ' + e.key);
+    console.log('Code: ' + e.code);
+});
